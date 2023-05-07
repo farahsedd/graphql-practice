@@ -21,19 +21,43 @@ type User {
   cvs: [Cv!]!
   }
 
+type cv_skill{
+    id : ID,
+    idCv: ID,
+    idSkill:ID
+}
+
 enum Role {
   USER
   ADMIN
-}
-
-type Info{
-  user:User,
-  skills:[Skill!]!
 }
 
 type Query{
     hello(name: String): String!
     getAllCvs:[Cv]
     getCvById(id: Int!):Cv
-    getInfoByCv:Info
+    getAllCvSkills:[cv_skill]
+}
+
+input AddCVInput {
+  name: String!
+  age: String!
+  job: String!
+  skills: [Int]!
+  user: Int!
+}
+
+input UpdateCVInput {
+  id: Int!
+  name: String
+  age: String
+  job: String
+  skills: [Int]
+  user: Int
+}
+
+type Mutation {
+  addCv(input: AddCVInput!): Cv
+  updateCv(id: Int!, input: UpdateCVInput!): Cv
+  deleteCV(id: Int!): Cv
 }

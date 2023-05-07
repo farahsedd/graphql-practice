@@ -1,6 +1,5 @@
 import { GraphQLError, graphql } from 'graphql';
 import { context } from '../context/context'
-import { isPropertyAccessOrQualifiedName } from 'typescript';
 
 export const Mutation = {
     addCv: (_parent: never, { input }: any, { pubSub, db }: typeof context) => {
@@ -29,7 +28,8 @@ export const Mutation = {
             };
             db.cv_skill.push(newCVSkill);
         })
-        // pubSub.publish('CVUpdates',newCV);
+        console.log({Cv:newCV,mutation:"Add"})
+        pubSub.publish('CVUpdates',{Cv:newCV,mutation:"Add"});
         return newCV;
     },
     updateCv: (_parent: never, { input }: any, { pubSub, db }: typeof context) => {
@@ -66,7 +66,7 @@ export const Mutation = {
             };
             db.cv_skill.push(newCVSkill);
         })
-        //pubSub.publish('CVUpdates',updatedCV);
+        pubSub.publish('CVUpdates',{updatedCV,mutation:"Update"});
         return updatedCV;
     },
     deleteCV: (_parent: never, { id }: { id: number }, { db, pubSub }: typeof context) => {
@@ -94,7 +94,7 @@ export const Mutation = {
             const Index = db.cv_skill.findIndex((y) => y.id === x.id);
             const deletedCvSkill = db.cv_skill.splice(Index, 1)[0];
         })
-        //pubSub.publish('CVUpdates', deletedCV);
+        pubSub.publish('CVUpdates', {deletedCV,mutation:"Delete"});
         return deletedCV;
     }
 }
